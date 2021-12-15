@@ -38,6 +38,15 @@ contract AsiaUniversityBank is Owner {
         // 目前還沒有需求
     }
 
+    // 測試
+    // function balanceOf(address addr) public view returns (uint) {
+    //     return auBalance[addr];
+    // }
+
+    // function setBalance() public {
+    //     auBalance[msg.sender] = 100;
+    // }
+
     // 下週(12/17 Fri)實作內容
     // 定義Deposit function
     // 將會發送deposit事件
