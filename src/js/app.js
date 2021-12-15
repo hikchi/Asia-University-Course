@@ -29,11 +29,12 @@ App = {
   },
 
   initContract: function () {
-    $.getJSON('AsiaUniversityBank.json', function (data) {
+    $.getJSON('AsiaUniversityBankSol.json', function (data) {
+      // $.getJSON('AsiaUniversityBank.json', function (data) {
       // 取得編譯過後的相關資料
       const AsiaUniversityBankArtifact = data;
       // 取得合約地址
-      const AsiaUniversityBankAddress = "0xaEe6ed8c34b37AA09773Db718E63C8d54fa97f36";
+      const AsiaUniversityBankAddress = "0xA79dD7eAf6C0c5a8e5e9Ea738f7e3090765AC376";
 
       // [Web3]] 初始化合約
       App.contracts.AsiaUniversityBank = new web3.eth.Contract(AsiaUniversityBankArtifact.abi, AsiaUniversityBankAddress)
@@ -52,6 +53,8 @@ App = {
 
   bindEvents: function () {
     $(document).on('click', '#transferButton', App.handleTransfer);
+    $(document).on('click', '#withdrawButton', App.handleWithdraw);
+    $(document).on('click', '#depositButton', App.handleDeposit);
   },
 
   handleTransfer: function (event) {
@@ -62,17 +65,20 @@ App = {
 
     console.log('Transfer ' + amount + ' AU to ' + toAddress);
 
-    var AsiaUniversityBankInstance;
+    let AsiaUniversityBankInstance;
 
     web3.eth.getAccounts(function (error, accounts) {
       if (error) {
         console.log(error);
       }
-
+      console.log({ toAddress, amount })
       const account = accounts[0];
+
+      const amountInWei = web3.utils.toWei(`${amount}`, 'ether');
       // [Web3] 
-      App.contracts.AsiaUniversityBank.methods.transfer(toAddress, amount).call({ from: account })
-        .then(function (instance) {
+      App.contracts.AsiaUniversityBank.methods.transfer(toAddress, amountInWei).send({ from: account })
+        .then(function (receipt) {
+          console.log(receipt)
           alert('Transfer Successful!');
           return App.getBalances();
         }).catch(function (err) {
@@ -96,12 +102,9 @@ App = {
   handleWithdraw: function (event) {
     event.preventDefault();
 
-    var amount = parseInt($('#AUTransferAmount').val());
-    var toAddress = $('#AUTransferAddress').val();
+    const withdrawAmount = parseInt($('#AUWithdrawAmount').val());
 
-    console.log('Transfer ' + amount + ' AU to ' + toAddress);
-
-    var AsiaUniversityBankInstance;
+    let AsiaUniversityBankInstance;
 
     web3.eth.getAccounts(function (error, accounts) {
       if (error) {
@@ -109,9 +112,13 @@ App = {
       }
 
       const account = accounts[0];
+      console.log('Withdraw ' + withdrawAmount + ' AU to ' + account);
+
+      const withdrawAmountInWei = web3.utils.toWei(`${withdrawAmount}`, 'ether');
+
       // [Web3] 
-      App.contracts.AsiaUniversityBank.methods.withdraw().call({ from: account })
-        .then(function (instance) {
+      App.contracts.AsiaUniversityBank.methods.withdraw(withdrawAmountInWei).send({ from: account })
+        .then(function (receipt) {
           alert('Withdraw Successful!');
           return App.getBalances();
         }).catch(function (err) {
@@ -135,12 +142,9 @@ App = {
   handleDeposit: function (event) {
     event.preventDefault();
 
-    var amount = parseInt($('#AUTransferAmount').val());
-    var toAddress = $('#AUTransferAddress').val();
+    const depositAmount = parseInt($('#AUDepositAmount').val());
 
-    console.log('Transfer ' + amount + ' AU to ' + toAddress);
-
-    var AsiaUniversityBankInstance;
+    let AsiaUniversityBankInstance;
 
     web3.eth.getAccounts(function (error, accounts) {
       if (error) {
@@ -148,9 +152,12 @@ App = {
       }
 
       const account = accounts[0];
+      console.log('Deposit ' + depositAmount + ' ETH to ' + account);
+
+      const depositAmountInWei = web3.utils.toWei(`${depositAmount}`, 'ether');
       // [Web3] 
-      App.contracts.AsiaUniversityBank.methods.deposit().call({ from: account })
-        .then(function (instance) {
+      App.contracts.AsiaUniversityBank.methods.deposit().send({ from: account, value: depositAmountInWei })
+        .then(function (receipt) {
           alert('Deposit Successful!');
           return App.getBalances();
         }).catch(function (err) {
@@ -174,7 +181,7 @@ App = {
   getBalances: function () {
     console.log('Getting balances...');
 
-    var AsiaUniversityBankInstance;
+    let AsiaUniversityBankInstance;
 
     web3.eth.getAccounts(function (error, accounts) {
       if (error) {
@@ -188,7 +195,7 @@ App = {
       // 需要先在Metamask新增自己在Ganache的帳戶
       App.contracts.AsiaUniversityBank.methods.balanceOf(account).call()
         .then(function (result) {
-          balance = result;
+          balance = result / 10 ** 18;
           $('#AUBalance').text(balance);
         }).catch(function (err) {
           console.log(err.message);
