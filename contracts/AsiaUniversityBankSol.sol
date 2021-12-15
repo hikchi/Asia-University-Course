@@ -55,7 +55,7 @@ contract AsiaUniversityBankSol is Owner {
     // 下週(12/17 Fri)實作內容
     // 定義Deposit function
     // 將會發送deposit事件
-    function deposit() public payable {
+    function deposit() public payable nonBlacklisted {
         address sender = msg.sender;
         uint depositAmount = msg.value;
 
@@ -66,7 +66,7 @@ contract AsiaUniversityBankSol is Owner {
 
     // 定義Withdraw function
     // 將會發送withdraw事件
-    function withdraw(uint256 withdrawAmount) public {
+    function withdraw(uint256 withdrawAmount) public nonBlacklisted {
         auBalance[msg.sender] -= withdrawAmount;
         (bool sent, ) = msg.sender.call{value: withdrawAmount}("");
         require(sent, "Failed to send Ether");
@@ -75,7 +75,7 @@ contract AsiaUniversityBankSol is Owner {
 
     // 定義Transfer function
     // 將會發送transfer事件
-    function transfer(address to, uint256 amount) public {
+    function transfer(address to, uint256 amount) public nonBlacklisted {
         address sender = msg.sender;
 
         auBalance[sender] -= amount;

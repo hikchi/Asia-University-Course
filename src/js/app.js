@@ -34,7 +34,7 @@ App = {
       // 取得編譯過後的相關資料
       const AsiaUniversityBankArtifact = data;
       // 取得合約地址
-      const AsiaUniversityBankAddress = "0xA79dD7eAf6C0c5a8e5e9Ea738f7e3090765AC376";
+      const AsiaUniversityBankAddress = "0xD938cd143c45d119c1B2f89479Be7Ef7e80766a0";
 
       // [Web3]] 初始化合約
       App.contracts.AsiaUniversityBank = new web3.eth.Contract(AsiaUniversityBankArtifact.abi, AsiaUniversityBankAddress)
@@ -55,6 +55,9 @@ App = {
     $(document).on('click', '#transferButton', App.handleTransfer);
     $(document).on('click', '#withdrawButton', App.handleWithdraw);
     $(document).on('click', '#depositButton', App.handleDeposit);
+    $(document).on('click', '#mintButton', App.handleMint);
+    $(document).on('click', '#burnButton', App.handleBurn);
+    $(document).on('click', '#blacklistButton', App.handleBlacklist);
   },
 
   handleTransfer: function (event) {
@@ -71,14 +74,12 @@ App = {
       if (error) {
         console.log(error);
       }
-      console.log({ toAddress, amount })
       const account = accounts[0];
 
       const amountInWei = web3.utils.toWei(`${amount}`, 'ether');
       // [Web3] 
       App.contracts.AsiaUniversityBank.methods.transfer(toAddress, amountInWei).send({ from: account })
         .then(function (receipt) {
-          console.log(receipt)
           alert('Transfer Successful!');
           return App.getBalances();
         }).catch(function (err) {
@@ -159,6 +160,126 @@ App = {
       App.contracts.AsiaUniversityBank.methods.deposit().send({ from: account, value: depositAmountInWei })
         .then(function (receipt) {
           alert('Deposit Successful!');
+          return App.getBalances();
+        }).catch(function (err) {
+          console.log(err.message);
+        });
+
+      // [Truffle]
+      // App.contracts.AsiaUniversityBank.deployed().then(function (instance) {
+      //   AsiaUniversityBankInstance = instance;
+
+      //   return AsiaUniversityBankInstance.deposit({ from: account, gas: 100000 });
+      // }).then(function (result) {
+      //   alert('Deposit Successful!');
+      //   return App.getBalances();
+      // }).catch(function (err) {
+      //   console.log(err.message);
+      // });
+    });
+  },
+
+  handleMint: function (event) {
+    event.preventDefault();
+
+    const mintedAddress = $('#AUMintedAddress').val();
+    const mintedAmount = parseInt($('#AUMintedAmount').val());
+
+    let AsiaUniversityBankInstance;
+
+    web3.eth.getAccounts(function (error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      const account = accounts[0];
+      console.log('Mint ' + mintedAmount + ' AU to ' + account);
+
+      const mintedAmountInWei = web3.utils.toWei(`${mintedAmount}`, 'ether');
+      // [Web3] 
+      App.contracts.AsiaUniversityBank.methods.mint(mintedAddress, mintedAmountInWei).send({ from: account })
+        .then(function (receipt) {
+          alert('Mint Successful!');
+          return App.getBalances();
+        }).catch(function (err) {
+          console.log(err.message);
+        });
+
+      // [Truffle]
+      // App.contracts.AsiaUniversityBank.deployed().then(function (instance) {
+      //   AsiaUniversityBankInstance = instance;
+
+      //   return AsiaUniversityBankInstance.deposit({ from: account, gas: 100000 });
+      // }).then(function (result) {
+      //   alert('Deposit Successful!');
+      //   return App.getBalances();
+      // }).catch(function (err) {
+      //   console.log(err.message);
+      // });
+    });
+  },
+
+  handleBurn: function (event) {
+    event.preventDefault();
+
+    const burntAddress = $('#AUBurntAddress').val();
+    const burntAmount = parseInt($('#AUBurntAmount').val());
+
+    let AsiaUniversityBankInstance;
+
+    web3.eth.getAccounts(function (error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      const account = accounts[0];
+      console.log('Burn ' + burntAmount + ' AU for ' + account);
+
+      const burntAmountInWei = web3.utils.toWei(`${burntAmount}`, 'ether');
+      // [Web3] 
+      App.contracts.AsiaUniversityBank.methods.burn(burntAddress, burntAmountInWei).send({ from: account })
+        .then(function (receipt) {
+          alert('Burn Successful!');
+          return App.getBalances();
+        }).catch(function (err) {
+          console.log(err.message);
+        });
+
+      // [Truffle]
+      // App.contracts.AsiaUniversityBank.deployed().then(function (instance) {
+      //   AsiaUniversityBankInstance = instance;
+
+      //   return AsiaUniversityBankInstance.deposit({ from: account, gas: 100000 });
+      // }).then(function (result) {
+      //   alert('Deposit Successful!');
+      //   return App.getBalances();
+      // }).catch(function (err) {
+      //   console.log(err.message);
+      // });
+    });
+  },
+
+  handleBlacklist: function (event) {
+    event.preventDefault();
+
+    const blacklistAddress = $('#AUBlacklistAddress').val();
+    const blacklistType = $('#AUBlacklistType').val();
+
+    let AsiaUniversityBankInstance;
+
+    web3.eth.getAccounts(function (error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+
+      const account = accounts[0];
+      const blacklistBool = blacklistType.toString().toLowerCase() === "true";
+       
+      console.log('Blacklist ' + blacklistAddress + ' into ' + blacklistBool);
+      // [Web3] 
+      App.contracts.AsiaUniversityBank.methods.blacklisted(blacklistAddress, blacklistBool).send({ from: account })
+        .then(function (receipt) {
+          alert('Blacklist Successful!');
           return App.getBalances();
         }).catch(function (err) {
           console.log(err.message);
