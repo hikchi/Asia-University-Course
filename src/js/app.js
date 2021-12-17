@@ -33,10 +33,11 @@ App = {
       // 取得編譯過後的相關資料
       // const AsiaUniversityBankArtifact = data;
       // 取得合約地址
-      const AsiaUniversityBankAddress = "<address>";
+      const AsiaUniversityBankAddress = "0xcBa34b7Ed4001b636EC5A4EFD45917D6e363484A";
 
       // [Web3]] 初始化合約
-      App.contracts.AsiaUniversityBank = undefined
+      // 需要合約的ABI, 跟地址(address)
+      App.contracts.AsiaUniversityBank = new web3.eth.Contract(data.abi, AsiaUniversityBankAddress)
 
 
       return App.getBalances();
