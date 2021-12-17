@@ -1,82 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>AsiaUniversityBank - Wallet</title>
 
-    <!-- Bootstrap -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <title>AsiaUniversityBank - Wallet</title>
 
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
+  <!-- Bootstrap -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-  </head>
-  <body>
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-12 col-sm-8 col-sm-push-2">
-          <h1 class="text-center">AsiaUniversityBank</h1>
-          <hr/>
-          <br/>
-        </div>
-      </div>
+</head>
 
-      <div id="petsRow" class="row">
-        <div class="col-sm-6 col-sm-push-3 col-md-4 col-md-push-4">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">My Wallet</h3>
-            </div>
-            <div class="panel-body">
-              <h4>Balance</h4>
-              <strong>Balance</strong>: <span id="AUBalance"></span> AU<br/><br/>
-              <h4>Transfer</h4>
-              <strong>AU幣轉帳</strong>
-              <input type="text" class="form-control" id="AUTransferAddress" placeholder="Address" />
-              <input type="text" class="form-control" id="AUTransferAmount" placeholder="Amount" />
-              <button class="btn btn-primary" id="transferButton" type="button">Transfer</button>
-              <h4>Withdraw</h4>
-              <strong>將AU幣提出，取得以太幣</strong>
-              <input type="text" class="form-control" id="AUWithdrawAmount" placeholder="Amount" />
-              <button class="btn btn-primary" id="withdrawButton" type="button">Withdraw</button>
-              <h4>Deposit</h4>
-              <strong>將以太幣存入合約，取得AU幣</strong>
-              <input type="text" class="form-control" id="AUDepositAmount" placeholder="Amount" />
-              <button class="btn btn-primary" id="depositButton" type="button">Deposit</button>
-              <h4>Mint</h4>
-              <strong>將AU幣鑄造至某地址</strong>
-              <input type="text" class="form-control" id="AUMintedAddress" placeholder="Address" />
-              <input type="text" class="form-control" id="AUMintedAmount" placeholder="Amount" />
-              <button class="btn btn-primary" id="mintButton" type="button">Mint</button>
-              <h4>Burn</h4>
-              <strong>將某地址的AU幣燒掉</strong>
-              <input type="text" class="form-control" id="AUBurntAddress" placeholder="Address" />
-              <input type="text" class="form-control" id="AUBurntAmount" placeholder="Amount" />
-              <button class="btn btn-primary" id="burnButton" type="button">Burn</button>
-              <h4>Blacklist</h4>
-              <strong>將某地址加入/移除黑名單</strong>
-              <input type="text" class="form-control" id="AUBlacklistAddress" placeholder="Address" />
-              <input type="text" class="form-control" id="AUBlacklistType" placeholder="True/False" />
-              <button class="btn btn-primary" id="blacklistButton" type="button">Blacklist</button>
-            </div>
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-8 col-sm-push-2">
+        <h1 class="text-center">AsiaUniversityBank</h1>
+        <hr />
+        <br />
+      </div>
+    </div>
+
+    <div id="petsRow" class="row">
+      <div class="col-sm-6 col-sm-push-3 col-md-4 col-md-push-4">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="panel-title">My Wallet</h3>
+          </div>
+          <div class="panel-body">
+            <h4>Balance</h4>
+            <strong>Balance</strong>: <span id="AUBalance"></span> AU<br /><br />
+            <h4>Transfer</h4>
+            <strong>AU幣轉帳</strong>
+            <input type="text" class="form-control" id="AUTransferAddress" placeholder="Address" />
+            <input type="text" class="form-control" id="AUTransferAmount" placeholder="Amount" />
+            <button class="btn btn-primary" id="transferButton" type="button">Transfer</button>
+            <h4>Withdraw</h4>
+            <strong>將AU幣提出，取得以太幣</strong>
+            <input type="text" class="form-control" id="AUWithdrawAmount" placeholder="Amount" />
+            <button class="btn btn-primary" id="withdrawButton" type="button">Withdraw</button>
+            <h4>Deposit</h4>
+            <strong>將以太幣存入合約，取得AU幣</strong>
+            <input type="text" class="form-control" id="AUDepositAmount" placeholder="Amount" />
+            <button class="btn btn-primary" id="depositButton" type="button">Deposit</button>
+            <h4>Mint</h4>
+            <strong>將AU幣鑄造至某地址</strong>
+            <input type="text" class="form-control" id="AUMintedAddress" placeholder="Address" />
+            <input type="text" class="form-control" id="AUMintedAmount" placeholder="Amount" />
+            <button class="btn btn-primary" id="mintButton" type="button">Mint</button>
+            <h4>Burn</h4>
+            <strong>將某地址的AU幣燒掉</strong>
+            <input type="text" class="form-control" id="AUBurntAddress" placeholder="Address" />
+            <input type="text" class="form-control" id="AUBurntAmount" placeholder="Amount" />
+            <button class="btn btn-primary" id="burnButton" type="button">Burn</button>
+            <h4>Blacklist</h4>
+            <strong>將某地址加入/移除黑名單</strong>
+            <input type="text" class="form-control" id="AUBlacklistAddress" placeholder="Address" />
+            <input type="text" class="form-control" id="AUBlacklistType" placeholder="True/False" />
+            <button class="btn btn-primary" id="blacklistButton" type="button">Blacklist</button>
           </div>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
-    <!-- <script src="js/web3.min.js"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
-    <script src="js/truffle-contract.js"></script>
-    <script src="js/app.js"></script>
-  </body>
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="js/bootstrap.min.js"></script>
+  <!-- <script src="js/web3.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+  <script src="js/truffle-contract.js"></script>
+  <script src="js/app.js"></script>
+  <!-- <script src="js/app.sol.js"></script> -->
+</body>
+
 </html>
