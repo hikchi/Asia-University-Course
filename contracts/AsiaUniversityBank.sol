@@ -15,7 +15,7 @@ contract AsiaUniversityBank is Owner {
     mapping(address => uint256) auBalance;
 
     // 需要紀錄黑名單
-    mapping(address => bool) blacklist;
+    mapping(address => bool) public blacklist;
 
     // 需要去記錄事件們
     // #1 Deposit event: 知道誰在什麼時候存了多少錢
