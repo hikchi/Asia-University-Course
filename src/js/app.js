@@ -29,16 +29,21 @@ App = {
   },
 
   initContract: function () {
-    $.getJSON('AsiaUniversityBank.json', function (data) {
+    $.getJSON('AsiaUniversityBankSol.json', function (data) {
+      // $.getJSON('AsiaUniversityBank.json', function (data) {
       // 取得編譯過後的相關資料
-      // const AsiaUniversityBankArtifact = data;
+      const AsiaUniversityBankArtifact = data;
       // 取得合約地址
-      const AsiaUniversityBankAddress = "<改成自己部署的地址>";
+      const AsiaUniversityBankAddress = "0xD938cd143c45d119c1B2f89479Be7Ef7e80766a0";
 
       // [Web3]] 初始化合約
-      // 需要合約的ABI, 跟地址(address)
-      App.contracts.AsiaUniversityBank = new web3.eth.Contract(data.abi, AsiaUniversityBankAddress)
+      App.contracts.AsiaUniversityBank = new web3.eth.Contract(AsiaUniversityBankArtifact.abi, AsiaUniversityBankAddress)
 
+      // [Truffle] 初始化合約
+      // App.contracts.AsiaUniversityBank = TruffleContract(AsiaUniversityBankArtifact);
+
+      // [Truffle] 將provider指定給AsiaUniversityBank參數
+      // App.contracts.AsiaUniversityBank.setProvider(App.web3Provider);
 
       return App.getBalances();
     });
@@ -73,7 +78,25 @@ App = {
 
       const amountInWei = web3.utils.toWei(`${amount}`, 'ether');
       // [Web3] 
+      App.contracts.AsiaUniversityBank.methods.transfer(toAddress, amountInWei).send({ from: account })
+        .then(function (receipt) {
+          alert('Transfer Successful!');
+          return App.getBalances();
+        }).catch(function (err) {
+          console.log(err.message);
+        });
 
+      // [Truffle]
+      // App.contracts.AsiaUniversityBank.deployed().then(function (instance) {
+      //   AsiaUniversityBankInstance = instance;
+
+      //   return AsiaUniversityBankInstance.transfer(toAddress, amount, { from: account, gas: 100000 });
+      // }).then(function (result) {
+      //   alert('Transfer Successful!');
+      //   return App.getBalances();
+      // }).catch(function (err) {
+      //   console.log(err.message);
+      // });
     });
   },
 
@@ -95,18 +118,25 @@ App = {
       const withdrawAmountInWei = web3.utils.toWei(`${withdrawAmount}`, 'ether');
 
       // [Web3] 
-      // 需要轉換成AU幣的單位，也就是10**18，因此要傳的是withdrawAmountInWei
-      App.contracts.AsiaUniversityBank.methods.withdraw(withdrawAmountInWei).send({
-        // 從目前連接的帳戶發送交易
-        from: account,
-      }).then(function (receipt) {
-        alert("提款成功！")
-        // 再次確認AU幣的餘額
-        return App.getBalances()
-      }).catch(function (error) {
-        console.log(error.message)
-      })
+      App.contracts.AsiaUniversityBank.methods.withdraw(withdrawAmountInWei).send({ from: account })
+        .then(function (receipt) {
+          alert('Withdraw Successful!');
+          return App.getBalances();
+        }).catch(function (err) {
+          console.log(err.message);
+        });
 
+      // [Truffle]
+      // App.contracts.AsiaUniversityBank.deployed().then(function (instance) {
+      //   AsiaUniversityBankInstance = instance;
+
+      //   return AsiaUniversityBankInstance.withdraw({ from: account, gas: 100000 });
+      // }).then(function (result) {
+      //   alert('Withdraw Successful!');
+      //   return App.getBalances();
+      // }).catch(function (err) {
+      //   console.log(err.message);
+      // });
     });
   },
 
@@ -127,22 +157,25 @@ App = {
 
       const depositAmountInWei = web3.utils.toWei(`${depositAmount}`, 'ether');
       // [Web3] 
-      // 取得合約實例
-      // 發送合約deposit函式
-      App.contracts.AsiaUniversityBank.methods.deposit().send({
-        // 從目前連接的帳戶發送交易
-        from: account,
-        // value: 這筆交易我要送多少ETH進去，合約會以msg.value呈現
-        // [Important] 單位要用wei，不可以用ether
-        value: depositAmountInWei,
-      }).then(function (receipt) {
-        alert("存款成功！")
-        // 再次確認AU幣的餘額
-        return App.getBalances()
-      }).catch(function (error) {
-        console.log(error.message)
-      })
+      App.contracts.AsiaUniversityBank.methods.deposit().send({ from: account, value: depositAmountInWei })
+        .then(function (receipt) {
+          alert('Deposit Successful!');
+          return App.getBalances();
+        }).catch(function (err) {
+          console.log(err.message);
+        });
 
+      // [Truffle]
+      // App.contracts.AsiaUniversityBank.deployed().then(function (instance) {
+      //   AsiaUniversityBankInstance = instance;
+
+      //   return AsiaUniversityBankInstance.deposit({ from: account, gas: 100000 });
+      // }).then(function (result) {
+      //   alert('Deposit Successful!');
+      //   return App.getBalances();
+      // }).catch(function (err) {
+      //   console.log(err.message);
+      // });
     });
   },
 
@@ -164,18 +197,25 @@ App = {
 
       const mintedAmountInWei = web3.utils.toWei(`${mintedAmount}`, 'ether');
       // [Web3] 
-      // 需要轉換成AU幣的單位，也就是10**18，因此要傳的是mintedAmountInWei
-      App.contracts.AsiaUniversityBank.methods.mint(mintedAddress, mintedAmountInWei).send({
-        // 從目前連接的帳戶發送交易
-        from: account,
-      }).then(function (receipt) {
-        alert("鑄幣成功！")
-        // 再次確認AU幣的餘額
-        return App.getBalances()
-      }).catch(function (error) {
-        console.log(error.message)
-      })
+      App.contracts.AsiaUniversityBank.methods.mint(mintedAddress, mintedAmountInWei).send({ from: account })
+        .then(function (receipt) {
+          alert('Mint Successful!');
+          return App.getBalances();
+        }).catch(function (err) {
+          console.log(err.message);
+        });
 
+      // [Truffle]
+      // App.contracts.AsiaUniversityBank.deployed().then(function (instance) {
+      //   AsiaUniversityBankInstance = instance;
+
+      //   return AsiaUniversityBankInstance.deposit({ from: account, gas: 100000 });
+      // }).then(function (result) {
+      //   alert('Deposit Successful!');
+      //   return App.getBalances();
+      // }).catch(function (err) {
+      //   console.log(err.message);
+      // });
     });
   },
 
@@ -197,7 +237,25 @@ App = {
 
       const burntAmountInWei = web3.utils.toWei(`${burntAmount}`, 'ether');
       // [Web3] 
+      App.contracts.AsiaUniversityBank.methods.burn(burntAddress, burntAmountInWei).send({ from: account })
+        .then(function (receipt) {
+          alert('Burn Successful!');
+          return App.getBalances();
+        }).catch(function (err) {
+          console.log(err.message);
+        });
 
+      // [Truffle]
+      // App.contracts.AsiaUniversityBank.deployed().then(function (instance) {
+      //   AsiaUniversityBankInstance = instance;
+
+      //   return AsiaUniversityBankInstance.deposit({ from: account, gas: 100000 });
+      // }).then(function (result) {
+      //   alert('Deposit Successful!');
+      //   return App.getBalances();
+      // }).catch(function (err) {
+      //   console.log(err.message);
+      // });
     });
   },
 
@@ -218,16 +276,34 @@ App = {
       const blacklistBool = blacklistType.toString().toLowerCase() === "true";
 
       console.log('Blacklist ' + blacklistAddress + ' into ' + blacklistBool);
-
       // [Web3] 
+      App.contracts.AsiaUniversityBank.methods.blacklisted(blacklistAddress, blacklistBool).send({ from: account })
+        .then(function (receipt) {
+          alert('Blacklist Successful!');
+          return App.getBalances();
+        }).catch(function (err) {
+          console.log(err.message);
+        });
 
+      // [Truffle]
+      // App.contracts.AsiaUniversityBank.deployed().then(function (instance) {
+      //   AsiaUniversityBankInstance = instance;
+
+      //   return AsiaUniversityBankInstance.deposit({ from: account, gas: 100000 });
+      // }).then(function (result) {
+      //   alert('Deposit Successful!');
+      //   return App.getBalances();
+      // }).catch(function (err) {
+      //   console.log(err.message);
+      // });
     });
   },
-  // 取得用戶的AU幣的餘額
+
   getBalances: function () {
     console.log('Getting balances...');
 
     let AsiaUniversityBankInstance;
+
     web3.eth.getAccounts(function (error, accounts) {
       if (error) {
         console.log(error);
@@ -238,21 +314,26 @@ App = {
 
       // [Web3] 取得你的餘額
       // 需要先在Metamask新增自己在Ganache的帳戶
-      // 怎麼做呢？
-      // 1. 取得合約實例
-      // 2. 呼叫balanceOf函式
-      // App.contracts.AsiaUniversityBank
       App.contracts.AsiaUniversityBank.methods.balanceOf(account).call()
         .then(function (result) {
-          // 一單位的AU幣實際上是10的18次方，顯示的時候需要把單位除回去
-          const balance = result / 10 ** 18
-          console.log(balance)
-          // 把id為AUBalance的HTML元件抓出來，並且改變他的文字(text)
-          $('#AUBalance').text(balance)
-        }).catch(function (error) {
-          console.log(error.message)
-        })
+          balance = result / 10 ** 18;
+          $('#AUBalance').text(balance);
+        }).catch(function (err) {
+          console.log(err.message);
+        });
 
+      // [Truffle]
+      // App.contracts.AsiaUniversityBank.deployed().then(function(instance) {
+      //   AsiaUniversityBankInstance = instance;
+
+      //   return AsiaUniversityBankInstance.balanceOf(account);
+      // }).then(function(result) {
+      //   balance = result.c[0];
+
+      //   $('#AUBalance').text(balance);
+      // }).catch(function(err) {
+      //   console.log(err.message);
+      // });
     });
   }
 
