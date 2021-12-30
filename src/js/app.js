@@ -34,15 +34,17 @@ App = {
       // 取得編譯過後的相關資料
       const AsiaUniversityBankArtifact = data;
       // 取得合約地址
-      const AsiaUniversityBankAddress = "0xD938cd143c45d119c1B2f89479Be7Ef7e80766a0";
+      // const AsiaUniversityBankAddress = "0xC0f8f124d211C7e15b0EBb6341BC60B7c191D48D";
 
       // [Web3]] 初始化合約
-      App.contracts.AsiaUniversityBank = new web3.eth.Contract(AsiaUniversityBankArtifact.abi, AsiaUniversityBankAddress)
+      // App.contracts.AsiaUniversityBank = new web3.eth.Contract(AsiaUniversityBankArtifact.abi, AsiaUniversityBankAddress)
 
       // [Truffle] 初始化合約
+      App.contracts.AsiaUniversityBank = TruffleContract(AsiaUniversityBankArtifact)
       // App.contracts.AsiaUniversityBank = TruffleContract(AsiaUniversityBankArtifact);
 
       // [Truffle] 將provider指定給AsiaUniversityBank參數
+      App.contracts.AsiaUniversityBank.setProvider(App.web3Provider)
       // App.contracts.AsiaUniversityBank.setProvider(App.web3Provider);
 
       return App.getBalances();
@@ -115,28 +117,30 @@ App = {
       const account = accounts[0];
       console.log('Withdraw ' + withdrawAmount + ' AU to ' + account);
 
-      const withdrawAmountInWei = web3.utils.toWei(`${withdrawAmount}`, 'ether');
+      // const withdrawAmountInWei = web3.utils.toWei(`${withdrawAmount}`, 'ether');
+      const oldWithdrawAmountInWei = web3.toWei(`${withdrawAmount}`, 'ether');
 
       // [Web3] 
-      App.contracts.AsiaUniversityBank.methods.withdraw(withdrawAmountInWei).send({ from: account })
-        .then(function (receipt) {
-          alert('Withdraw Successful!');
-          return App.getBalances();
-        }).catch(function (err) {
-          console.log(err.message);
-        });
+      // App.contracts.AsiaUniversityBank.methods.withdraw(withdrawAmountInWei).send({ from: account })
+      //   .then(function (receipt) {
+      //     alert('Withdraw Successful!');
+      //     return App.getBalances();
+      //   }).catch(function (err) {
+      //     console.log(err.message);
+      //   });
 
       // [Truffle]
-      // App.contracts.AsiaUniversityBank.deployed().then(function (instance) {
-      //   AsiaUniversityBankInstance = instance;
+      App.contracts.AsiaUniversityBank.deployed().then(function (instance) {
+        AsiaUniversityBankInstance = instance;
 
-      //   return AsiaUniversityBankInstance.withdraw({ from: account, gas: 100000 });
-      // }).then(function (result) {
-      //   alert('Withdraw Successful!');
-      //   return App.getBalances();
-      // }).catch(function (err) {
-      //   console.log(err.message);
-      // });
+        return AsiaUniversityBankInstance.withdraw(oldWithdrawAmountInWei, { from: account, gas: 100000 });
+      }).then(function (result) {
+        alert('Withdraw Successful!');
+        return App.getBalances();
+      }).catch(function (err) {
+        console.log(err.message);
+      });
+
     });
   },
 
@@ -155,27 +159,28 @@ App = {
       const account = accounts[0];
       console.log('Deposit ' + depositAmount + ' ETH to ' + account);
 
-      const depositAmountInWei = web3.utils.toWei(`${depositAmount}`, 'ether');
+      // const depositAmountInWei = web3.utils.toWei(`${depositAmount}`, 'ether');
+      const oldDepositAmountInWei = web3.toWei(`${depositAmount}`, 'ether');
       // [Web3] 
-      App.contracts.AsiaUniversityBank.methods.deposit().send({ from: account, value: depositAmountInWei })
-        .then(function (receipt) {
-          alert('Deposit Successful!');
-          return App.getBalances();
-        }).catch(function (err) {
-          console.log(err.message);
-        });
+      // App.contracts.AsiaUniversityBank.methods.deposit().send({ from: account, value: depositAmountInWei })
+      //   .then(function (receipt) {
+      //     alert('Deposit Successful!');
+      //     return App.getBalances();
+      //   }).catch(function (err) {
+      //     console.log(err.message);
+      //   });
 
       // [Truffle]
-      // App.contracts.AsiaUniversityBank.deployed().then(function (instance) {
-      //   AsiaUniversityBankInstance = instance;
+      App.contracts.AsiaUniversityBank.deployed().then(function (instance) {
+        AsiaUniversityBankInstance = instance;
 
-      //   return AsiaUniversityBankInstance.deposit({ from: account, gas: 100000 });
-      // }).then(function (result) {
-      //   alert('Deposit Successful!');
-      //   return App.getBalances();
-      // }).catch(function (err) {
-      //   console.log(err.message);
-      // });
+        return AsiaUniversityBankInstance.deposit({ from: account, value: oldDepositAmountInWei, gas: 100000 });
+      }).then(function (result) {
+        alert('Deposit Successful!');
+        return App.getBalances();
+      }).catch(function (err) {
+        console.log(err.message);
+      });
     });
   },
 
@@ -314,15 +319,25 @@ App = {
 
       // [Web3] 取得你的餘額
       // 需要先在Metamask新增自己在Ganache的帳戶
-      App.contracts.AsiaUniversityBank.methods.balanceOf(account).call()
-        .then(function (result) {
-          balance = result / 10 ** 18;
-          $('#AUBalance').text(balance);
-        }).catch(function (err) {
-          console.log(err.message);
-        });
+      // App.contracts.AsiaUniversityBank.methods.balanceOf(account).call()
+      //   .then(function (result) {
+      //     balance = result / 10 ** 18;
+      //     $('#AUBalance').text(balance);
+      //   }).catch(function (err) {
+      //     console.log(err.message);
+      //   });
 
       // [Truffle]
+      App.contracts.AsiaUniversityBank.deployed().then(function (instance) {
+        AsiaUniversityBankInstance = instance
+        return AsiaUniversityBankInstance.balanceOf(account)
+      }).then(function (result) {
+        console.log(result)
+        balance = result.c[0] / 10 ** 4
+        $('#AUBalance').text(balance);
+      }).catch(function (err) {
+        console.log(err.message)
+      })
       // App.contracts.AsiaUniversityBank.deployed().then(function(instance) {
       //   AsiaUniversityBankInstance = instance;
 
