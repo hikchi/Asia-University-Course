@@ -7,6 +7,16 @@ pragma solidity >=0.7.0 <0.9.0;
 // 假設Owner就是管理員
 import "./Owner.sol";
 
+// interface 設計
+interface IAsiaUniversityBank {
+    function deposit() external;
+    function withdraw(uint withdrawAmount) external;
+    function transfer(address to, uint amount) external;
+    function mint(address to, uint mintAmount) external;
+    function burn(address to, uint burnAmount) external;
+    function modifyBlacklist(address to, bool _blacklisted) external;
+}
+
 // Contract主程式碼區塊
 contract AsiaUniversityBankSol is Owner {
     // 需要去記錄每個人的AU幣餘額
