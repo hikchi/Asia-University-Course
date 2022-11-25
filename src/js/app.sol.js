@@ -34,7 +34,7 @@ App = {
       // 取得編譯過後的相關資料
       const AsiaUniversityBankArtifact = data;
       // 取得合約地址
-      const AsiaUniversityBankAddress = "0xD938cd143c45d119c1B2f89479Be7Ef7e80766a0";
+      const AsiaUniversityBankAddress = "<fill in the address being deployed>";
 
       // [Web3]] 初始化合約
       App.contracts.AsiaUniversityBank = new web3.eth.Contract(AsiaUniversityBankArtifact.abi, AsiaUniversityBankAddress)
