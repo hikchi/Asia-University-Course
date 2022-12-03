@@ -128,4 +128,9 @@ contract AsiaUniversityBankSol is Owner {
         // 發送blacklist事件
         emit BlacklistEvent(to, _blacklisted, block.timestamp);
     }
+
+    // 新增餘額
+    function balanceOf(address addr) public view returns (uint256) {
+        return auBalance[addr]; // address => uint
+    }
 }
